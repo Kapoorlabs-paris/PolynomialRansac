@@ -2,6 +2,7 @@ package ransacPoly;
 
 import java.util.Collection;
 
+import mpicbg.models.IllDefinedDataPointsException;
 import mpicbg.models.NotEnoughDataPointsException;
 import mpicbg.models.Point;
 
@@ -41,8 +42,9 @@ public interface Function< P extends Point >
 	 * Fits this Function to the set of {@link Point}s.
 	 * @param points - {@link Collection} of {@link Point}s
 	 * @throws NotEnoughDataPointsException - thrown if not enough {@link Point}s are in the {@link Collection}
+	 * @throws IllDefinedDataPointsException 
 	 */
-	public void fitFunction( final Collection<P> points ) throws NotEnoughDataPointsException;
+	public void fitFunction( final Collection<P> points ) throws NotEnoughDataPointsException, IllDefinedDataPointsException;
 	
 	
 

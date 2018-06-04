@@ -157,7 +157,7 @@ public class LinearFunction extends AbstractFunction2D< LinearFunction > impleme
 			final double epsilon,
 			final double minInlierRatio,
 			final int minNumInliers,
-			final double maxGapDim0,
+			
 			final double minSlope,
 			final double maxSlope )
 		throws NotEnoughDataPointsException
@@ -199,7 +199,7 @@ A:		while ( i < iterations )
 			final ArrayList< P > tempInliers = new ArrayList< P >();
 
 			int numInliers = 0;
-			boolean isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers, maxGapDim0, minSlope, maxSlope );
+			boolean isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers, minSlope, maxSlope );
 			while ( isGood && numInliers < tempInliers.size() )
 			{
 				numInliers = tempInliers.size();
@@ -209,7 +209,7 @@ A:		while ( i < iterations )
 					++i;
 					continue A;
 				}
-				isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers, maxGapDim0, minSlope, maxSlope );
+				isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers, minSlope, maxSlope );
 			}
 			if (
 					isGood &&
@@ -250,7 +250,7 @@ A:		while ( i < iterations )
 			final double epsilon,
 			final double minInlierRatio,
 			final int minNumInliers,
-			final double maxGapDim0,
+		
 			final double minSlope,
 			final double maxSlope )
 	{
@@ -288,13 +288,7 @@ A:		while ( i < iterations )
 			{
 				final P current = inliers.get( i );
 
-				if ( Math.abs( current.getP1().getW()[ 0 ] - inliers.get( i - 1 ).getP1().getW()[ 0 ] ) <= maxGapDim0 )
-				{
-					// distance between the points <= maxGapDim0, then just keep adding the points
-					tmpInliers.add( inliers.get( i ) );
-				}
-				else
-				{
+			
 					// distance between two points on the x > maxGapDim0
 
 					// if this was the largest chunk of data so far, keep it
@@ -307,7 +301,7 @@ A:		while ( i < iterations )
 					// clear tmpInliers, add the current one for a new start
 					tmpInliers.clear();
 					tmpInliers.add( current );
-				}
+				
 			}
 
 			inliers.clear();

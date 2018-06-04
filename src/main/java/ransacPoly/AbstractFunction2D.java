@@ -45,19 +45,17 @@ public abstract class AbstractFunction2D< M extends AbstractFunction2D< M > > ex
 	 *   empty, false otherwise.  If false, {@link AbstractModel} remains unchanged.
 	 */
 	@SuppressWarnings("deprecation")
-	final public < P extends PointFunctionMatch >boolean ransac(
+	final public < P extends PointFunctionMatch >boolean ransacN(
 			final List< P > candidates,
 			final Collection< P > inliers,
 			final int iterations,
 			final double epsilon,
 			final double minInlierRatio,
-			final int minNumInliers,
-			final double maxGapDim0 )
+			final int minNumInliers)
 		throws NotEnoughDataPointsException
 	{
 		if ( candidates.size() < getMinNumMatches() )
 			throw new NotEnoughDataPointsException( candidates.size() + " data points are not enough to solve the Model, at least " + getMinNumMatches() + " data points required." );
-
 		cost = Double.MAX_VALUE;
 
 		final M copy = copy();
@@ -92,7 +90,7 @@ A:		while ( i < iterations )
 			final ArrayList< P > tempInliers = new ArrayList< P >();
 
 			int numInliers = 0;
-			boolean isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers, maxGapDim0 );
+			boolean isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers );
 			while ( isGood && numInliers < tempInliers.size() )
 			{
 				numInliers = tempInliers.size();
@@ -102,7 +100,7 @@ A:		while ( i < iterations )
 					++i;
 					continue A;
 				}
-				isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers, maxGapDim0 );
+				isGood = m.test( candidates, tempInliers, epsilon, minInlierRatio, minNumInliers );
 			}
 			if (
 					isGood &&
@@ -117,7 +115,7 @@ A:		while ( i < iterations )
 		}
 		if ( inliers.size() == 0 )
 			return false;
-
+		System.out.println(candidates.size() + " Candidate in the ransac loop list size");
 		set( copy );
 		return true;
 	}
@@ -176,28 +174,12 @@ A:		while ( i < iterations )
 
 			for ( int i = 1; i < inliers.size(); ++i )
 			{
-				final P current = inliers.get( i );
+				
 
-				if ( Math.abs( current.getP1().getW()[ 0 ] - inliers.get( i - 1 ).getP1().getW()[ 0 ] ) <= maxGapDim0 )
-				{
+				
 					// distance between the points <= maxGapDim0, then just keep adding the points
 					tmpInliers.add( inliers.get( i ) );
-				}
-				else
-				{
-					// distance between two points on the x > maxGapDim0
-
-					// if this was the largest chunk of data so far, keep it
-					if ( tmpInliers.size() > maxInliers.size() )
-					{
-						maxInliers.clear();
-						maxInliers.addAll( tmpInliers );
-					}
-
-					// clear tmpInliers, add the current one for a new start
-					tmpInliers.clear();
-					tmpInliers.add( current );
-				}
+			
 			}
 
 			inliers.clear();

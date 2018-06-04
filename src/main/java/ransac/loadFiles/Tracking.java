@@ -35,6 +35,8 @@ import ransacPoly.AbstractFunction2D;
 import ransacPoly.InterpolatedPolynomial;
 import ransacPoly.LinearFunction;
 import ransacPoly.Polynomial;
+import ransacPoly.QuadraticFunction;
+import ransacPoly.RansacFunction;
 
 public class Tracking {
 
@@ -407,8 +409,7 @@ public class Tracking {
 			final ArrayList< Point > mts,
 			final P function,
 			final double maxError,
-			final int minNumInliers,
-			final int maxDist )
+			final int minNumInliers )
 	{
 		final ArrayList< PointFunctionMatch > candidates = new ArrayList<PointFunctionMatch>();
 		final ArrayList< PointFunctionMatch > inliers = new ArrayList<PointFunctionMatch>();
@@ -418,7 +419,7 @@ public class Tracking {
 
 		try
 		{
-			function.ransac( candidates, inliers, 100, maxError, 0, minNumInliers, maxDist );
+			function.ransac( candidates, inliers, 100, maxError, 0, minNumInliers );
 
 			if (inliers!=null){
 			
@@ -453,8 +454,7 @@ public class Tracking {
 			final ArrayList< Point > mts,
 			final P function,
 			final double maxError,
-			final int minNumInliers,
-			final int maxDist )
+			final int minNumInliers )
 	{
 		boolean fitted;
 
@@ -469,7 +469,7 @@ public class Tracking {
 		{
 			fitted = false;
 
-			final Pair< P, ArrayList< PointFunctionMatch > > f = findFunction( remainingPoints, function.copy(), maxError, minNumInliers, maxDist );
+			final Pair< P, ArrayList< PointFunctionMatch > > f = findFunction( remainingPoints, function.copy(), maxError, minNumInliers );
 
 			if ( f != null && f.getB().size() > 0 )
 			{
@@ -493,11 +493,12 @@ public class Tracking {
 	}
 
 	
+	@SuppressWarnings("deprecation")
 	public static Pair< LinearFunction, ArrayList< PointFunctionMatch > > findLinearFunction(
 			final ArrayList< Point > mts,
 			final double maxError,
 			final int minNumInliers,
-			final int maxDist,
+			
 			final double minSlope,
 			final double maxSlope )
 	{
@@ -511,7 +512,7 @@ public class Tracking {
 
 		try
 		{
-			function.ransac( candidates, inliers, 1000, maxError, 0, minNumInliers, maxDist, minSlope, maxSlope );
+			function.ransac( candidates, inliers, 1000, maxError, 0, minNumInliers, minSlope, maxSlope );
 
 			if ( inliers.size() >= function.getMinNumPoints() )
 			{
@@ -551,7 +552,7 @@ public class Tracking {
 
 		try
 		{
-			function.ransac( candidates, inliers, 100, maxError, 0.01, minNumInliers, maxDist );
+			function.ransac( candidates, inliers, 100, maxError, 0.01, minNumInliers );
 
 			if ( inliers.size() >= function.getMinNumPoints() )
 			{
@@ -575,6 +576,51 @@ public class Tracking {
 		}
 
 		return new ValuePair< P, ArrayList< PointFunctionMatch > >( function, inliers );
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static RansacFunction findQuadLinearFunction(
+			final ArrayList< Point > mts,
+			final QuadraticFunction function,
+		
+			final double maxError,
+			final int minNumInliers)
+	{
+		final ArrayList< PointFunctionMatch > candidates = new ArrayList<PointFunctionMatch>();
+		final ArrayList< PointFunctionMatch > inliers = new ArrayList<PointFunctionMatch>();
+		
+		for ( final Point p : mts )
+			candidates.add( new PointFunctionMatch( p ) );
+		System.out.println(candidates.size() + " Candidate list size");
+		try
+		{
+			function.ransacN( candidates, inliers, 1000, maxError, 0.001, minNumInliers );
+
+			if ( inliers.size() >= function.getMinNumPoints() )
+			{
+				System.out.println( "Fitting Quadratic function (on inliers)" );
+				function.fit( inliers );
+				RansacFunction returnfunction = new RansacFunction(function, inliers, candidates);
+				
+				System.out.println("Size of candidate points " + candidates.size() + " "+ "Size of inliers " + inliers.size()  );
+				return returnfunction;
+			}
+			else
+			{
+				System.out.println( " Increase the number of minimum points " );
+				return null;
+			}
+			
+			
+		}
+		catch ( Exception e )
+		{
+			System.out.println( "Couldn't fit function: " + e );
+		
+			return null;
+		}
+
+		
 	}
 
 	public static Pair< Double, Double > fromTo( final ArrayList< PointFunctionMatch > points )

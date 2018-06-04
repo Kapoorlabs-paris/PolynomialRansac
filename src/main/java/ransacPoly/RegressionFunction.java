@@ -15,6 +15,8 @@ public class RegressionFunction {
 	
 	public final LinearFunction back;
 	
+	public final MixedPolynomialFunction <LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> > mixedfunction;
+	
 	public final ArrayList<double[]> Curvaturepoints;
 	
 	public final ArrayList<PointFunctionMatch> inliers;
@@ -36,6 +38,8 @@ public class RegressionFunction {
 		this.quad = null;
 		
 		this.back = null;
+		
+		this.mixedfunction = null;
 		
 		this.Curvaturepoints = Curvaturepoints;
 		
@@ -63,6 +67,8 @@ public class RegressionFunction {
 		
 		this.quad = quad;
 		
+		this.mixedfunction = null;
+		
 		this.Curvaturepoints = Curvaturepoints;
 		
 		this.inliers = inliers;
@@ -88,6 +94,28 @@ public class RegressionFunction {
 		this.back = back;
 		
 		this.quad = null;
+		
+		this.mixedfunction = null;
+		
+		this.Curvaturepoints = Curvaturepoints;
+		
+		this.inliers = inliers;
+		
+		this.candidates = candidates;
+		
+	}
+    
+    public RegressionFunction (final MixedPolynomialFunction<LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> >  mixedfunction, final ArrayList<double[]> Curvaturepoints, final ArrayList<PointFunctionMatch> inliers,
+    		final ArrayList<PointFunctionMatch> candidates) {
+		
+		
+		this.regression = null;
+		
+		this.mixedfunction = mixedfunction;
+		
+		this.quad = null;
+		
+		this.back = null;
 		
 		this.Curvaturepoints = Curvaturepoints;
 		

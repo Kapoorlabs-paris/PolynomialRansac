@@ -34,6 +34,8 @@ import ransac.PointFunctionMatch.*;
 import ransacPoly.AbstractFunction2D;
 import ransacPoly.InterpolatedPolynomial;
 import ransacPoly.LinearFunction;
+import ransacPoly.MixedPolynomial;
+import ransacPoly.MixedPolynomialFunction;
 import ransacPoly.Polynomial;
 import ransacPoly.QuadraticFunction;
 import ransacPoly.RansacFunction;
@@ -581,23 +583,23 @@ public class Tracking {
 	@SuppressWarnings("deprecation")
 	public static RansacFunction findQuadLinearFunction(
 			final ArrayList< Point > mts,
-			final QuadraticFunction function,
+			final MixedPolynomialFunction<LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> >  function,
 		
 			final double maxError,
 			final int minNumInliers)
 	{
 		final ArrayList< PointFunctionMatch > candidates = new ArrayList<PointFunctionMatch>();
 		final ArrayList< PointFunctionMatch > inliers = new ArrayList<PointFunctionMatch>();
-		final LinearFunction backup = new LinearFunction();
 		for ( final Point p : mts )
 			candidates.add( new PointFunctionMatch( p ) );
 		System.out.println(candidates.size() + " Candidate list size");
 		try
 		{
-			function.ransacN( candidates, inliers, 1000, maxError, 0.001, minNumInliers );
-
+			function.ransacN( candidates, inliers, 100, maxError, 0.01, minNumInliers );
+			System.out.println(inliers.size() + " Inlier list size");
 			if ( inliers.size() >= function.getMinNumPoints() )
 			{
+				
 				System.out.println( "Fitting Quadratic function (on inliers)" );
 				function.fit( inliers );
 				RansacFunction returnfunction = new RansacFunction(function, inliers, candidates);
@@ -606,11 +608,8 @@ public class Tracking {
 			}
 			else
 			{
-				System.out.println( " Fitting linear function");
-				backup.fit( inliers );
-				RansacFunction returnfunction = new RansacFunction(backup, inliers, candidates);
 				
-				return returnfunction;
+				return null;
 			}
 			
 			

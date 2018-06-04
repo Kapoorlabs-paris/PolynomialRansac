@@ -13,6 +13,8 @@ public class RegressionFunction {
 	
 	public final QuadraticFunction quad;
 	
+	public final LinearFunction back;
+	
 	public final ArrayList<double[]> Curvaturepoints;
 	
 	public final ArrayList<PointFunctionMatch> inliers;
@@ -32,6 +34,8 @@ public class RegressionFunction {
 		this.regression = regression;
 		
 		this.quad = null;
+		
+		this.back = null;
 		
 		this.Curvaturepoints = Curvaturepoints;
 		
@@ -55,7 +59,35 @@ public class RegressionFunction {
 		
 		this.regression = null;
 		
+		this.back = null;
+		
 		this.quad = quad;
+		
+		this.Curvaturepoints = Curvaturepoints;
+		
+		this.inliers = inliers;
+		
+		this.candidates = candidates;
+		
+	}
+    
+    /**
+	 * 
+	 * Constructor choice for Ransac
+	 * 
+	 * @param quad
+	 * @param Curvaturepoints
+	 * @param perimeter
+	 */
+    public RegressionFunction (final LinearFunction back, final ArrayList<double[]> Curvaturepoints, final ArrayList<PointFunctionMatch> inliers,
+    		final ArrayList<PointFunctionMatch> candidates) {
+		
+		
+		this.regression = null;
+		
+		this.back = back;
+		
+		this.quad = null;
 		
 		this.Curvaturepoints = Curvaturepoints;
 		

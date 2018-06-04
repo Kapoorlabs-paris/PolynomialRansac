@@ -8,6 +8,8 @@ public class RansacFunction {
 
 	
 	public final QuadraticFunction function;
+	
+	public final LinearFunction backup;
 
 	public final ArrayList<PointFunctionMatch> inliers;
 	
@@ -25,12 +27,32 @@ public class RansacFunction {
 		
 		this.function = function;
 
+		this.backup = null;
+		
 		this.inliers = inliers;
 		
 		this.candidates = candidates;
 		
 	}
 
+	/**
+	 * 
+	 * A ransac function output containing a quadratic function if one was found else it would fit a linear function if there are atleast two points to fit it on to
+	 * @param function
+	 * @param linearfunction
+	 * @param inliers
+	 */
+	public RansacFunction(final LinearFunction backup, ArrayList<PointFunctionMatch> inliers,  ArrayList<PointFunctionMatch> candidates ) {
+		
+		
+		this.function = null;
 
+		this.backup = backup;
+		
+		this.inliers = inliers;
+		
+		this.candidates = candidates;
+		
+	}
     
 }

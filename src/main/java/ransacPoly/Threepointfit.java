@@ -50,7 +50,6 @@ public class Threepointfit {
 	        // variation not accounted for
 	        Matrix residuals = X.times(Coefficients).minus(Y);
 	        SSE = residuals.norm2() * residuals.norm2();
-	        
 			
 		}
 		public double GetCoefficients(int j) {

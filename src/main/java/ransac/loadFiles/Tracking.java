@@ -588,7 +588,7 @@ public class Tracking {
 	{
 		final ArrayList< PointFunctionMatch > candidates = new ArrayList<PointFunctionMatch>();
 		final ArrayList< PointFunctionMatch > inliers = new ArrayList<PointFunctionMatch>();
-		
+		final LinearFunction backup = new LinearFunction();
 		for ( final Point p : mts )
 			candidates.add( new PointFunctionMatch( p ) );
 		System.out.println(candidates.size() + " Candidate list size");
@@ -602,13 +602,15 @@ public class Tracking {
 				function.fit( inliers );
 				RansacFunction returnfunction = new RansacFunction(function, inliers, candidates);
 				
-				System.out.println("Size of candidate points " + candidates.size() + " "+ "Size of inliers " + inliers.size()  );
 				return returnfunction;
 			}
 			else
 			{
-				System.out.println( " Increase the number of minimum points " );
-				return null;
+				System.out.println( " Fitting linear function");
+				backup.fit( inliers );
+				RansacFunction returnfunction = new RansacFunction(backup, inliers, candidates);
+				
+				return returnfunction;
 			}
 			
 			

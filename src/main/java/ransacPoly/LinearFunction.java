@@ -116,6 +116,13 @@ public class LinearFunction extends AbstractFunction2D< LinearFunction > impleme
 	public double predict( final double x ) { return m*x + n; }
 
 	@Override
+	public double predictFirstderivative( final double x ) { return m; }
+	
+	@Override
+	public double predictSecondderivative( final double x ) { return 0; }
+	
+	
+	@Override
 	public LinearFunction copy()
 	{
 		LinearFunction c = new LinearFunction();

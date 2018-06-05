@@ -77,18 +77,27 @@ public class Threepointfit {
 	    public double predictderivative(double x) {
 	        // horner's method for derivative of a function
 	        double y = 0;
-	        for (int j = degree - 1; j >= 0; j--)
-	            y = (j + 1) * GetCoefficients(j + 1) + (x * y);
-	        return y;
+			for (int j = 0; j <= degree; j++) {
+				 if(j >= 1)    
+			        	y += j * GetCoefficients(j) * Math.pow(x, j - 1);
+			}
+			
+			return y;
 	    }
 	    
 	    // Horner's method to get y values correspoing to x
 	    public double predictsecderivative(double x) {
 	        // horner's method for derivative of a function
-	        double y = 0;
-	        for (int j = degree - 2; j >= 0; j--)
-	            y = j * (j + 1) * GetCoefficients(j + 1) + (x * y);
-	    
-	        return y;
+	    	double y = 0.0;
+			for (int j = 0; j <= degree; j++) {
+			 	if(j >= 2)
+		        	 y += j * ( j - 1) * GetCoefficients(j) * Math.pow(x, j - 2);
+			}
+			return y;
 	    }
+	    
+	
+		
+		
+	    
 }

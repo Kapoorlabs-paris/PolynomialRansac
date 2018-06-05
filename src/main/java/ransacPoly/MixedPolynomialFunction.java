@@ -45,6 +45,7 @@ public abstract class MixedPolynomialFunction< A extends AbstractFunction< A >, 
 	{
 		this.a = a;
 		this.b = b;
+		
 		this.lambda = lambda;
 		l1 = 1.0 - lambda;
 	}
@@ -59,6 +60,8 @@ public abstract class MixedPolynomialFunction< A extends AbstractFunction< A >, 
 		this.l1 = 1.0f - lambda;
 	}
 
+	
+	
 	@Override
 	public int getMinNumPoints() { return Math.max( a.getMinNumPoints(), b.getMinNumPoints() ); }
 
@@ -82,6 +85,7 @@ public abstract class MixedPolynomialFunction< A extends AbstractFunction< A >, 
 		interpolate( points );
 	}
 
+	
 	protected abstract void interpolate( final Collection< Point > points )
 			throws NotEnoughDataPointsException, IllDefinedDataPointsException;
 }

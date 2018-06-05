@@ -25,5 +25,18 @@ public interface Polynomial < F extends Polynomial< F, P >, P extends Point > ex
 	 * @return - the corresponding y value
 	 */
 	public double predict( final double x );
+	
+	/**
+	 * @param x
+	 * @return - the corresponding y derivative value
+	 */
+	public double predictFirstderivative( final double x );
+	
+	/**
+	 * @param x
+	 * @return - the corresponding y Second derivative value
+	 */
+	public double predictSecondderivative( final double x );
+	
 }
 

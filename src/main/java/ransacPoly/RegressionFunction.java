@@ -3,19 +3,17 @@ package ransacPoly;
 import java.util.ArrayList;
 
 import ransac.PointFunctionMatch.PointFunctionMatch;
-import ransacPoly.AbstractFunction2D;
-import ransacPoly.QuadraticFunction;
 
 public class RegressionFunction {
 
 	
 	public final Threepointfit regression;
 	
-	public final QuadraticFunction quad;
+	public final HigherOrderPolynomialFunction higherorder;
 	
 	public final LinearFunction back;
 	
-	public final MixedPolynomialFunction <LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> > mixedfunction;
+	public final MixedPolynomialFunction <HigherOrderPolynomialFunction, HigherOrderPolynomialFunction,MixedPolynomial<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction> > mixedfunction;
 	
 	public final ArrayList<double[]> Curvaturepoints;
 	
@@ -35,7 +33,7 @@ public class RegressionFunction {
 		
 		this.regression = regression;
 		
-		this.quad = null;
+		this.higherorder = null;
 		
 		this.back = null;
 		
@@ -53,11 +51,11 @@ public class RegressionFunction {
 	 * 
 	 * Constructor choice for Ransac
 	 * 
-	 * @param quad
+	 * @param higherorder
 	 * @param Curvaturepoints
 	 * @param perimeter
 	 */
-    public RegressionFunction (final QuadraticFunction quad, final ArrayList<double[]> Curvaturepoints, final ArrayList<PointFunctionMatch> inliers,
+    public RegressionFunction (final HigherOrderPolynomialFunction higherorder, final ArrayList<double[]> Curvaturepoints, final ArrayList<PointFunctionMatch> inliers,
     		final ArrayList<PointFunctionMatch> candidates) {
 		
 		
@@ -65,7 +63,7 @@ public class RegressionFunction {
 		
 		this.back = null;
 		
-		this.quad = quad;
+		this.higherorder = higherorder;
 		
 		this.mixedfunction = null;
 		
@@ -81,7 +79,7 @@ public class RegressionFunction {
 	 * 
 	 * Constructor choice for Ransac
 	 * 
-	 * @param quad
+	 * @param higherorder
 	 * @param Curvaturepoints
 	 * @param perimeter
 	 */
@@ -93,7 +91,7 @@ public class RegressionFunction {
 		
 		this.back = back;
 		
-		this.quad = null;
+		this.higherorder = null;
 		
 		this.mixedfunction = null;
 		
@@ -105,7 +103,7 @@ public class RegressionFunction {
 		
 	}
     
-    public RegressionFunction (final MixedPolynomialFunction<LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> >  mixedfunction, final ArrayList<double[]> Curvaturepoints, final ArrayList<PointFunctionMatch> inliers,
+    public RegressionFunction (final MixedPolynomialFunction<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction,MixedPolynomial<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction> >  mixedfunction, final ArrayList<double[]> Curvaturepoints, final ArrayList<PointFunctionMatch> inliers,
     		final ArrayList<PointFunctionMatch> candidates) {
 		
 		
@@ -113,7 +111,7 @@ public class RegressionFunction {
 		
 		this.mixedfunction = mixedfunction;
 		
-		this.quad = null;
+		this.higherorder = null;
 		
 		this.back = null;
 		

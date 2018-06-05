@@ -32,6 +32,7 @@ import net.imglib2.util.ValuePair;
 import ransac.FLSobject;
 import ransac.PointFunctionMatch.*;
 import ransacPoly.AbstractFunction2D;
+import ransacPoly.HigherOrderPolynomialFunction;
 import ransacPoly.InterpolatedPolynomial;
 import ransacPoly.LinearFunction;
 import ransacPoly.MixedPolynomial;
@@ -233,7 +234,6 @@ public class Tracking {
 		}
 		for( Pair< Integer, Double> point:points){
 			Pair< Integer, Double> newpoint = new ValuePair< Integer, Double >(point.getA()/ 10 , point.getB() / maxlength );
-			System.out.println(point.getA() + " " + point.getB());
 			normalpoints.add(newpoint);
 		}
 		
@@ -583,7 +583,7 @@ public class Tracking {
 	@SuppressWarnings("deprecation")
 	public static RansacFunction findQuadLinearFunction(
 			final ArrayList< Point > mts,
-			final MixedPolynomialFunction<LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> >  function,
+			final MixedPolynomialFunction<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction,MixedPolynomial<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction> > mixedfunction,
 		
 			final double maxError,
 			final int minNumInliers)
@@ -592,24 +592,27 @@ public class Tracking {
 		final ArrayList< PointFunctionMatch > inliers = new ArrayList<PointFunctionMatch>();
 		for ( final Point p : mts )
 			candidates.add( new PointFunctionMatch( p ) );
-		System.out.println(candidates.size() + " Candidate list size");
 		try
 		{
-			function.ransacN( candidates, inliers, 100, maxError, 0.01, minNumInliers );
-			System.out.println(inliers.size() + " Inlier list size");
-			if ( inliers.size() >= function.getMinNumPoints() )
-			{
+			
+			
+			// Find Inliers using quadratic function, then fit a higher order polynomial to it
+			mixedfunction.ransacN( candidates, inliers, 100, maxError, 0, mixedfunction.getMinNumPoints() );
+			
+			if(inliers.size() > mixedfunction.getMinNumPoints()) {
 				
-				System.out.println( "Fitting Quadratic function (on inliers)" );
-				function.fit( inliers );
-				RansacFunction returnfunction = new RansacFunction(function, inliers, candidates);
+				mixedfunction.fit( inliers );
+				RansacFunction returnfunction = new RansacFunction(mixedfunction, inliers, candidates);
 				
 				return returnfunction;
 			}
-			else
-			{
+			else {
 				
-				return null;
+				System.out.println("Ransac Failed, falling over to Brute force regression");
+				mixedfunction.fit( candidates );
+				RansacFunction returnfunction = new RansacFunction(mixedfunction, candidates, candidates);
+				
+				return returnfunction;
 			}
 			
 			

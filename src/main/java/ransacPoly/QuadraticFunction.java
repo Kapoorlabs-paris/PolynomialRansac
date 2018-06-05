@@ -56,6 +56,12 @@ public class QuadraticFunction extends AbstractFunction2D< QuadraticFunction > i
 	public double predict( final double x ) { return a*x*x + b*x + c; }
 
 	@Override
+	public double predictFirstderivative( final double x ) { return 2 * a * x + b; }
+	
+	@Override
+	public double predictSecondderivative( final double x ) { return 2 * a; }
+	
+	@Override
 	public int getMinNumPoints() { return minNumPoints; }
 
 	@Override

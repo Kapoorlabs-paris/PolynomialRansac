@@ -379,14 +379,35 @@ public class InterpolatedPolynomial extends AbstractFunction<InterpolatedPolynom
 	}
 
 	// Horner's method to get y values correspoing to x
-	public double predict(double x) {
+	public double predict( final double x )
+	{
 		// horner's method
 		double y = 0.0;
 		for (int j = degree; j >= 0; j--)
 			y = getCoefficients(j) + (x * y);
 		return y;
 	}
-
+	
+	   // Horner's method to get y values correspoing to x
+    public double predictderivative(double x) {
+        // horner's method for derivative of a function
+        double y = 0;
+        for (int j = degree; j >= 0; j--)
+        if(degree >= 1)    
+        	y += j * getCoefficients(j) * Math.pow(x, degree - 1);
+        return y;
+    }
+    
+    // Horner's method to get y values correspoing to x
+    public double predictsecderivative(double x) {
+        // horner's method for derivative of a function
+        double y = 0;
+        for (int j = degree; j >= 0; j--)
+        	if(degree >= 2)
+        	 y += j * ( j - 1) * getCoefficients(j) * Math.pow(x, degree - 2);
+    
+        return y;
+    }
 	public static void main(String[] args) throws NotEnoughDataPointsException, IllDefinedDataPointsException {
 		final ArrayList<Point> points = new ArrayList<Point>();
 

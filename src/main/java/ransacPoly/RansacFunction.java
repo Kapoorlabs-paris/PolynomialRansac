@@ -8,9 +8,9 @@ import ransac.PointFunctionMatch.PointFunctionMatch;
 public class RansacFunction {
 
 	
-	public final QuadraticFunction function;
+	public final HigherOrderPolynomialFunction function;
 	
-	public final MixedPolynomialFunction<LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> > mixedfunction;
+	public final MixedPolynomialFunction<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction,MixedPolynomial<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction> > mixedfunction;
 	
 	public final LinearFunction backup;
 
@@ -25,7 +25,7 @@ public class RansacFunction {
 	 * @param linearfunction
 	 * @param inliers
 	 */
-	public RansacFunction(final QuadraticFunction function, ArrayList<PointFunctionMatch> inliers,  ArrayList<PointFunctionMatch> candidates ) {
+	public RansacFunction(final HigherOrderPolynomialFunction function, ArrayList<PointFunctionMatch> inliers,  ArrayList<PointFunctionMatch> candidates ) {
 		
 		
 		this.function = function;
@@ -69,7 +69,7 @@ public class RansacFunction {
 	 * @param candidates
 	 */
 	
-	public RansacFunction(final MixedPolynomialFunction<LinearFunction, QuadraticFunction,MixedPolynomial<LinearFunction, QuadraticFunction> > mixedfunction, ArrayList<PointFunctionMatch> inliers,  ArrayList<PointFunctionMatch> candidates ) {
+	public RansacFunction(final MixedPolynomialFunction<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction,MixedPolynomial<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction> > mixedfunction, ArrayList<PointFunctionMatch> inliers,  ArrayList<PointFunctionMatch> candidates ) {
 		
 		
 		this.function = null;

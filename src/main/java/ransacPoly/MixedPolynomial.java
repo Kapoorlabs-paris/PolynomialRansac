@@ -51,6 +51,11 @@ interpolatedFunction.fitFunction( interpolatedPoints );
 public double predict( final double x ) { return interpolatedFunction.predict( x ); }
 
 @Override
+public double predictFirstderivative( final double x ) { return interpolatedFunction.predictFirstderivative( x ); }
+
+@Override
+public double predictSecondderivative( final double x ) { return interpolatedFunction.predictSecondderivative( x ); }
+@Override
 public double distanceTo( final Point point ) { return interpolatedFunction.distanceTo( point ); }
 
 @Override

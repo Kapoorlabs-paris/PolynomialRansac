@@ -139,6 +139,7 @@ public class HigherOrderPolynomialFunction extends AbstractFunction2D< HigherOrd
 		final double x1 = point.getW()[0];
 		final double y1 = point.getW()[1];
 
+		
 		return new NewtonRaphson( rndx, degree ).run( x1, y1, coeff );
 	}
 
@@ -183,8 +184,8 @@ public class HigherOrderPolynomialFunction extends AbstractFunction2D< HigherOrd
 	public double predictFirstderivative( final double x )
 	{
 		double y = 0.0;
-		for (int j = 0; j <= degree; j++) {
-			 if(j >= 1)    
+		for (int j = 1; j <= degree; j++) {
+			   
 		        	y += j * getCoefficient(j) * Math.pow(x, j - 1);
 		}
 		
@@ -197,8 +198,8 @@ public class HigherOrderPolynomialFunction extends AbstractFunction2D< HigherOrd
 	{
 		double y = 0.0;
 	
-		for (int j = 0; j <= degree; j++) {
-		 	if(j >= 2)
+		for (int j = 2; j <= degree; j++) {
+		 	
 	        	 y += j * ( j - 1) * getCoefficient(j) * Math.pow(x, j - 2);
 		}
 		return y;

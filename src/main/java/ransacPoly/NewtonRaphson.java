@@ -46,7 +46,6 @@ public class NewtonRaphson
 			dminsecdiff = (polyfunc - y)*secdelpolyfuncdiff + delpolyfuncdiff * polyfuncdiff + 2 * polyfuncdiff * delpolyfuncdiff ;
 
 			// Compute the first iteration of the new point
-
 			++iteration;
 
 			if ( iteration % 1000 == 0 )
@@ -71,8 +70,8 @@ public class NewtonRaphson
 
 			// precompute the powers
 			updatePowCache( xcNew );
+			
 			computeFunctions( coeff );
-
 			if ( iteration >= MAX_ITER )
 				break;
 		}
@@ -119,10 +118,12 @@ public class NewtonRaphson
 	protected void iterate()
 	{
 		this.xcNew = iterate( xc, dmin, dMinDiff, dminsecdiff );
+		
 	}
 
 	public double iterate( final double oldpoint, final double function, final double functionderiv, final double functionsecderiv )
 	{
+		
 		return oldpoint -  (function / functionderiv) * (1 + damp * 0.5 * function * functionsecderiv / (functionderiv * functionderiv) );
 	}
 
@@ -136,7 +137,6 @@ public class NewtonRaphson
 
 		tmp = maxY - minY;
 		distance += tmp*tmp;
-
 		return Math.sqrt( distance );
 	}
 

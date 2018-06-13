@@ -2,12 +2,16 @@ package ransacPoly;
 
 import java.util.ArrayList;
 
+import net.imglib2.algorithm.ransac.RansacModels.Circle;
+import net.imglib2.algorithm.ransac.RansacModels.Ellipsoid;
 import ransac.PointFunctionMatch.PointFunctionMatch;
 
 public class RegressionFunction {
 
 	
 	public final Threepointfit regression;
+	
+	public final Circle ellipse;
 	
 	public final HigherOrderPolynomialFunction higherorder;
 	
@@ -45,6 +49,29 @@ public class RegressionFunction {
 		
 		this.candidates = null;
 		
+		this.ellipse = null;
+		
+	}
+	
+public RegressionFunction (final Circle ellipse, final ArrayList<double[]> Curvaturepoints) {
+		
+		
+		this.regression = null;
+		
+		this.higherorder = null;
+		
+		this.back = null;
+		
+		this.mixedfunction = null;
+		
+		this.Curvaturepoints = Curvaturepoints;
+		
+		this.inliers = null;
+		
+		this.candidates = null;
+		
+		this.ellipse = ellipse;
+		
 	}
 	
 	/**
@@ -72,6 +99,8 @@ public class RegressionFunction {
 		this.inliers = inliers;
 		
 		this.candidates = candidates;
+		
+		this.ellipse = null;
 		
 	}
     
@@ -101,6 +130,8 @@ public class RegressionFunction {
 		
 		this.candidates = candidates;
 		
+		this.ellipse = null;
+		
 	}
     
     public RegressionFunction (final MixedPolynomialFunction<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction,MixedPolynomial<HigherOrderPolynomialFunction, HigherOrderPolynomialFunction> >  mixedfunction, final ArrayList<double[]> Curvaturepoints, final ArrayList<PointFunctionMatch> inliers,
@@ -120,6 +151,8 @@ public class RegressionFunction {
 		this.inliers = inliers;
 		
 		this.candidates = candidates;
+		
+		this.ellipse = null;
 		
 	}
 	

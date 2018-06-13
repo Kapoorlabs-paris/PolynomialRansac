@@ -115,7 +115,6 @@ A:		while ( i < iterations )
 		}
 		if ( inliers.size() == 0 )
 			return false;
-		System.out.println(candidates.size() + " Candidate in the ransac loop list size");
 		set( copy );
 		return true;
 	}

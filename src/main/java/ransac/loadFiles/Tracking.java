@@ -580,6 +580,10 @@ public class Tracking {
 		return new ValuePair< P, ArrayList< PointFunctionMatch > >( function, inliers );
 	}
 	
+	
+	
+	
+	
 	@SuppressWarnings("deprecation")
 	public static RansacFunction findQuadLinearFunction(
 			final ArrayList< Point > mts,
@@ -608,11 +612,12 @@ public class Tracking {
 			}
 			else {
 				
+				/*
 				System.out.println("Ransac Failed, falling over to Brute force regression");
 				mixedfunction.fit( candidates );
 				RansacFunction returnfunction = new RansacFunction(mixedfunction, candidates, candidates);
-				
-				return returnfunction;
+				*/
+				return null;
 			}
 			
 			

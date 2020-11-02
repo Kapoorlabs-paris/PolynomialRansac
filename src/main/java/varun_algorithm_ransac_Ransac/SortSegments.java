@@ -20,7 +20,7 @@ public class SortSegments {
 					Pair<Ellipsoid, List<Pair<RealLocalizable, T>>> o2) {
 
 				int i = 0;
-				int numDim = o1.getA().numDimensions();
+				int numDim = o1.getA().center().numDimensions();
 
 				while (i < numDim) {
 

@@ -5,11 +5,10 @@ import Jama.Matrix;
 
 import net.imglib2.RealLocalizable;
 import net.imglib2.RealPoint;
-import net.imglib2.roi.geom.real.AbstractEllipsoid;
 import net.imglib2.util.LinAlgHelpers;
 
 /**
- * Hyperellipsoid in n dimensions.
+ * Hyperellipsoid in this.n dimensions.
  *
  * <p>
  * Points <em>x</em> on the ellipsoid are <em>(x - c)^T * M * (x - c) = 1</em>, where
@@ -25,7 +24,7 @@ import net.imglib2.util.LinAlgHelpers;
  * @author Tobias Pietzsch &lt;tobias.pietzsch@gmail.com&gt; Modified to implement Ellipsoid of ImageJ-roi by V. Kapoor
  * */
 
-public class HyperEllipsoid extends AbstractEllipsoid {
+public class HyperEllipsoid {
 
 	
 	private double[][] axes;
@@ -38,6 +37,9 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 	
 	private double[] Coefficients;
 	
+	private double[] center;
+	
+	private int n;
 
 	/**
 	 * Construct hyperellipsoid. Some of the parameters may be null. The center
@@ -58,23 +60,24 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 	 */
 	protected HyperEllipsoid( final double[] center, final double[][] covariance, final double[][] precision, final double[][] axes, final double[] radii )
 	{
-		super( center, radii );
 		this.axes = axes;
+		this.center = center;
 		this.radii = radii;
 		this.covariance = covariance;
 		this.precision = precision;
+		this.n = center.length;
 	}
 	
 	
 	protected HyperEllipsoid(final double[] center, final double[][] covariance, final double[][] precision, final double[][] axes, final double[] radii , final double[] Coefficients) {
 		
-		super(center, radii);
 		this.axes = axes;
+		this.center = center;
 		this.radii = radii;
 		this.covariance = covariance;
 		this.precision = precision;
 		this.Coefficients = Coefficients;
-		
+		this.n = center.length;
 	}
 	
 
@@ -180,28 +183,27 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 	
 	public boolean test( final double[] point )
 	{
-		final double[] x = new double[ n ];
-		final double[] y = new double[ n ];
+		final double[] x = new double[ this.n ];
+		final double[] y = new double[ this.n ];
 		LinAlgHelpers.subtract( point, getCenter(), x );
 		LinAlgHelpers.mult( getPrecision(), x, y );
 		return LinAlgHelpers.dot( x, y ) <= 1;
 	}
-	@Override
 	public boolean test( final RealLocalizable point )
 	{
-		final double[] p = new double[ n ];
+		final double[] p = new double[ this.n ];
 		point.localize( p );
 		return test( p );
 	}
 
 	private void computeCovarianceFromAxesAndRadii()
 	{
-		final double[][] tmp = new double[ n ][];
-		covariance = new double[ n ][];
-		for ( int d = 0; d < n; ++d )
+		final double[][] tmp = new double[ this.n ][];
+		covariance = new double[ this.n ][];
+		for ( int d = 0; d < this.n; ++d )
 		{
-			tmp[ d ] = new double[ n ];
-			covariance[ d ] = new double[ n ];
+			tmp[ d ] = new double[ this.n ];
+			covariance[ d ] = new double[ this.n ];
 			LinAlgHelpers.scale( axes[ d ], radii[ d ] * radii[ d ], tmp[ d ] );
 		}
 		LinAlgHelpers.multATB( axes, tmp, covariance );
@@ -214,12 +216,12 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 	
 	private void computePrecisionFromAxesAndRadii()
 	{
-		final double[][] tmp = new double[ n ][];
-		precision = new double[ n ][];
-		for ( int d = 0; d < n; ++d )
+		final double[][] tmp = new double[ this.n ][];
+		precision = new double[ this.n ][];
+		for ( int d = 0; d < this.n; ++d )
 		{
-			tmp[ d ] = new double[ n ];
-			precision[ d ] = new double[ n ];
+			tmp[ d ] = new double[ this.n ];
+			precision[ d ] = new double[ this.n ];
 			LinAlgHelpers.scale( axes[ d ], 1.0 / ( radii[ d ] * radii[ d ] ), tmp[ d ] );
 		}
 		LinAlgHelpers.multATB( axes, tmp, precision );
@@ -235,8 +237,8 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 		final EigenvalueDecomposition eig = new Matrix( precision ).eig();
 		axes = eig.getV().transpose().getArray();
 		final Matrix ev = eig.getD();
-		radii = new double[ n ];
-		for ( int d = 0; d < n; ++d )
+		radii = new double[ this.n ];
+		for ( int d = 0; d < this.n; ++d )
 			radii[ d ] = Math.sqrt( 1 / ev.get( d, d ) );
 	}
 
@@ -245,25 +247,22 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 		final EigenvalueDecomposition eig = new Matrix( covariance ).eig();
 		axes = eig.getV().transpose().getArray();
 		final Matrix ev = eig.getD();
-		radii = new double[ n ];
-		for ( int d = 0; d < n; ++d )
+		radii = new double[ this.n ];
+		for ( int d = 0; d < this.n; ++d )
 			radii[ d ] = Math.sqrt( ev.get( d, d ) );
 	}
 
-	@Override
 	public double exponent() {
 
 		return 2;
 	}
 
-	@Override
 	public double semiAxisLength(int d) {
 
 		
 		return radii[d];
 	}
 
-	@Override
 	public RealPoint center() {
 		
 		
@@ -271,7 +270,6 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 		return new RealPoint(getCenter());
 	}
 
-	@Override
 	public void setSemiAxisLength(int d, double length) {
 		radii[d] = length;
 		
@@ -293,22 +291,19 @@ public class HyperEllipsoid extends AbstractEllipsoid {
 	 */
 	protected double distancePowered( final RealLocalizable l )
 	{
-		assert ( l.numDimensions() >= n ): "l must have no less than " + n + " dimensions";
+		assert ( l.numDimensions() >= this.n ): "l must have no less than " + this.n + " dimensions";
 
 		double distancePowered = 0;
-		for ( int d = 0; d < n; d++ )
+		for ( int d = 0; d < this.n; d++ )
 			distancePowered += ( ( l.getDoublePosition( d ) - getCenter()[ d ] ) / radii[ d ] ) * ( ( l.getDoublePosition( d ) - getCenter()[ d ] ) / radii[ d ] );
 
 		return distancePowered;
 	}
 
-	@Override
 	public double realMin(int d) {
 		
 		return getCenter()[d] - radii[d];
 	}
-
-	@Override
 	public double realMax(int d) {
 
 		return getCenter()[d] + radii[d];

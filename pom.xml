@@ -110,7 +110,13 @@
         <dependency>
             <groupId>net.imglib2</groupId>
             <artifactId>imglib2-roi</artifactId>
-        </dependency>
+        </dependency><!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-math3</artifactId>
+    <version>3.6</version>
+</dependency>
+        
         
         <!-- ImageJ dependencies -->
         <dependency>
